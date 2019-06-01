@@ -68,6 +68,7 @@ namespace Scattergories
 
         private void LoadJson()
         {
+            //json took from https://github.com/davidwen/scattergories
             using (StreamReader r = new StreamReader("categories.json"))
             {
                 string json = r.ReadToEnd();

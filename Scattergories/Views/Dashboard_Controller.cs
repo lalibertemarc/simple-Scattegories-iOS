@@ -9,7 +9,9 @@ namespace Scattergories
 {
 	public partial class Dashboard_Controller : UIViewController
 	{
-        char[] diceLetters = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'R', 'S', 'T', 'W' };
+        //char array taken from https://github.com/davidwen/scattergories
+        char[] _diceLetters = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'R', 'S', 'T', 'W' };
+
         float _secs;
         Timer _timer;
 
@@ -103,8 +105,8 @@ namespace Scattergories
         void ChooseNewLetter()
         {
             var random = new Random();
-            int index = random.Next(diceLetters.Length);
-            _letterLabel.Text = diceLetters[index].ToString();
+            int index = random.Next(_diceLetters.Length);
+            _letterLabel.Text = _diceLetters[index].ToString();
         }
 
     }

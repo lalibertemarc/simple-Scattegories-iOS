@@ -122,6 +122,7 @@
     <ItemGroup>
         <Folder Include="Resources\" />
         <Folder Include="Views\" />
+        <Folder Include="Cells\" />
     </ItemGroup>
     <ItemGroup>
         <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -151,8 +152,8 @@
         <Compile Include="Views\Dashboard_Controller.designer.cs">
           <DependentUpon>Dashboard_Controller.cs</DependentUpon>
         </Compile>
-        <Compile Include="CategoriesCell.cs" />
-        <Compile Include="CategoriesCell.designer.cs">
+        <Compile Include="Cells\CategoriesCell.cs" />
+        <Compile Include="Cells\CategoriesCell.designer.cs">
           <DependentUpon>CategoriesCell.cs</DependentUpon>
         </Compile>
     </ItemGroup>
