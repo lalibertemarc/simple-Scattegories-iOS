@@ -1,0 +1,23 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scattergories", "Scattergories\Scattergories.csproj", "{19CAB927-0577-4350-A122-6EE0F21B22CF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|iPhoneSimulator = Debug|iPhoneSimulator
+		Release|iPhoneSimulator = Release|iPhoneSimulator
+		Debug|iPhone = Debug|iPhone
+		Release|iPhone = Release|iPhone
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{19CAB927-0577-4350-A122-6EE0F21B22CF}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
+		{19CAB927-0577-4350-A122-6EE0F21B22CF}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
+		{19CAB927-0577-4350-A122-6EE0F21B22CF}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
+		{19CAB927-0577-4350-A122-6EE0F21B22CF}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
+		{19CAB927-0577-4350-A122-6EE0F21B22CF}.Debug|iPhone.ActiveCfg = Debug|iPhone
+		{19CAB927-0577-4350-A122-6EE0F21B22CF}.Debug|iPhone.Build.0 = Debug|iPhone
+		{19CAB927-0577-4350-A122-6EE0F21B22CF}.Release|iPhone.ActiveCfg = Release|iPhone
+		{19CAB927-0577-4350-A122-6EE0F21B22CF}.Release|iPhone.Build.0 = Release|iPhone
+	EndGlobalSection
+EndGlobal
