@@ -5,7 +5,7 @@
 	<key>CFBundleDisplayName</key>
 	<string>Scattergories</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.lalibertemarc.Scattergories</string>
+	<string>com.lalibertemarc.Scattegories</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
@@ -45,6 +45,8 @@
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/AppIcon.appiconset</string>
 	<key>CFBundleName</key>
-	<string>Scattergories</string>
+	<string>Scattegories</string>
+	<key>AppCenterKey</key>
+	<string>a69b55db-691a-4f3b-8f77-72b318ad7176</string>
 </dict>
 </plist>

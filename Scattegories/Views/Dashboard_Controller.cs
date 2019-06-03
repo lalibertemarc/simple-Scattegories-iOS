@@ -14,6 +14,7 @@ namespace Scattergories
 
         float _secs;
         Timer _timer;
+        public event EventHandler<bool> OnNewGame;
 
         public Dashboard_Controller (IntPtr handle) : base (handle)
 		{
@@ -73,6 +74,7 @@ namespace Scattergories
 
         void _newGameButton_TouchUpInside(object sender, EventArgs e)
         {
+            OnNewGame?.Invoke(this, true);
             ChooseNewLetter();
 
             if(_timer != null)

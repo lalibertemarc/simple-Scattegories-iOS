@@ -34,26 +34,31 @@ namespace Scattergories
             this.TableView.RegisterClassForCellReuse(typeof(CategoriesCell), CategoriesCell.Key);
 
             _refresher = new UIRefreshControl();
-            _refresher.ValueChanged += async (sender, e) => {
-                FormCurrentCategories();
-                this.TableView.Source = new CategoriesSource(_currentGameList);
-                this.TableView.ReloadData();
-                await RefreshAsync();
+
+            _refresher.ValueChanged += (sender, e) => {
+                ReloadCategories();
+                RefreshAsync();
             };
 
             this.TableView.AddSubview(_refresher);
 
         }
 
-      
-        async Task RefreshAsync()
+        void ReloadCategories()
+        {
+            FormCurrentCategories();
+            this.TableView.Source = new CategoriesSource(_currentGameList);
+            this.TableView.ReloadData();
+        }
+
+        void RefreshAsync()
         {
             _refresher.BeginRefreshing();
             _refresher.EndRefreshing();
 
         }
 
-        private void FormCurrentCategories()
+        void FormCurrentCategories()
         {
             _currentGameList = new List<string>();
             var random = new Random();
@@ -65,8 +70,7 @@ namespace Scattergories
             }
         }
 
-
-        private void LoadJson()
+        void LoadJson()
         {
             //json took from https://github.com/davidwen/scattergories
             using (StreamReader r = new StreamReader("categories.json"))
@@ -74,6 +78,11 @@ namespace Scattergories
                 string json = r.ReadToEnd();
                 _allCategoriesList = JsonConvert.DeserializeObject<List<string>>(json);
             }
+        }
+
+        public void InitNewGame()
+        {
+            ReloadCategories();
         }
     }
 

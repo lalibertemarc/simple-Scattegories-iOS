@@ -9,7 +9,6 @@ using System.CodeDom.Compiler;
 
 namespace Scattergories
 {
-	[Register ("CategoriesCell")]
 	partial class CategoriesCell
 	{
 		

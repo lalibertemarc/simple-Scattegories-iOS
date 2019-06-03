@@ -1,4 +1,7 @@
 ﻿using Foundation;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Crashes;
+using Microsoft.AppCenter.Distribute;
 using UIKit;
 
 namespace Scattergories
@@ -20,6 +23,9 @@ namespace Scattergories
         {
             // Override point for customization after application launch.
             // If not required for your application you can safely delete this method
+
+            NSString appCenterKey = (NSString)NSBundle.MainBundle.ObjectForInfoDictionary("AppCenterKey");
+            AppCenter.Start($"{appCenterKey}", typeof(Crashes), typeof(Distribute));
 
             return true;
         }

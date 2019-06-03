@@ -20,6 +20,11 @@ namespace Scattergories
             var detailsController = this.ViewControllers[1];
             this.PreferredDisplayMode = UISplitViewControllerDisplayMode.AllVisible;
 
+
+            ((Dashboard_Controller)masterController.ChildViewControllers[0]).OnNewGame += (sender, e) => {
+                ((Categories_Controller)detailsController).InitNewGame();
+            };
+
             ShowDetailViewController(Storyboard.InstantiateViewController("CategoriesController"), this);
         }
     }

@@ -7,7 +7,8 @@ using UIKit;
 
 namespace Scattergories
 {
-	public partial class CategoriesCell : UITableViewCell
+    [Register("CategoriesCell")]
+    public partial class CategoriesCell : UITableViewCell
 	{
         UILabel titleLabel;
         public static readonly NSString Key = new NSString("CategoriesCell");
