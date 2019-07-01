@@ -2,6 +2,7 @@
 
 using System;
 using System.Timers;
+using AudioToolbox;
 using Foundation;
 using UIKit;
 
@@ -10,7 +11,7 @@ namespace Scattergories
 	public partial class Dashboard_Controller : UIViewController
 	{
         //char array taken from https://github.com/davidwen/scattergories
-        char[] _diceLetters = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'R', 'S', 'T', 'W' };
+        char[] _diceLetters = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'R', 'S', 'T'};
 
         float _secs;
         Timer _timer;
@@ -23,26 +24,46 @@ namespace Scattergories
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
-            _letterTitleLabel.Text = "Lettre";
-            _letterLabel.Font = UIFont.BoldSystemFontOfSize(16.0f);
+            //hidden by request.
+            _letterTitleLabel.Text = "";
 
-            _letterLabel.Font = UIFont.BoldSystemFontOfSize(60.0f);
+            _letterLabel.TextAlignment = UITextAlignment.Center;
+            _letterLabel.Font = UIFont.BoldSystemFontOfSize(130.0f);
+            _letterLabel.TranslatesAutoresizingMaskIntoConstraints = false;
 
             ChooseNewLetter();
 
-            _timerTitleLabel.Text = "Compteur";
-            _timerTitleLabel.Font = UIFont.BoldSystemFontOfSize(16.0f);
+            //_timerTitleLabel.Text = "Compteur";
+            //_timerTitleLabel.Font = UIFont.BoldSystemFontOfSize(16.0f);
 
             _newGameButton.TitleLabel.Text = "Nouvelle Partie";
-            _secs = _timerSlider.Value;
+            _newGameButton.TranslatesAutoresizingMaskIntoConstraints = false;
+            _secs = GetTimerValueInSeconds();
 
-            _timerLabel.Text = FormatSeconds(_timerSlider.Value);
+            _timerLabel.Text = FormatSeconds(GetTimerValueInSeconds());
+            _timerLabel.TranslatesAutoresizingMaskIntoConstraints = false;
+            _timerLabel.TextAlignment = UITextAlignment.Center;
+            _timerLabel.Font = UIFont.BoldSystemFontOfSize(50.0f);
+
+            _timerSlider.TranslatesAutoresizingMaskIntoConstraints = false;
 
             _timerSlider.ValueChanged += (sender, e) =>
             {
-                _timerLabel.Text = FormatSeconds(_timerSlider.Value);
-                _secs = _timerSlider.Value;
+                var value = (float)Math.Round(GetTimerValueInSeconds());
+                _timerLabel.Text = FormatSeconds(value);
+                _secs = value;
+                _timerSlider.Value = (float)Math.Round(_timerSlider.Value);
             };
+
+            var swipeRight = new UISwipeGestureRecognizer(ChooseNewLetter);
+            swipeRight.Direction = UISwipeGestureRecognizerDirection.Right;
+            var swipeLeft = new UISwipeGestureRecognizer(ChooseNewLetter);
+            swipeLeft.Direction = UISwipeGestureRecognizerDirection.Left;
+
+            _letterLabel.AddGestureRecognizer(swipeRight);
+            _letterLabel.AddGestureRecognizer(swipeLeft);
+   
+            _letterLabel.UserInteractionEnabled = true;
 
             _newGameButton.SetTitle("Nouvelle partie", UIControlState.Normal);
 
@@ -51,33 +72,63 @@ namespace Scattergories
             _newGameButton.Layer.BorderColor = UIColor.Black.CGColor;
 
             _newGameButton.UserInteractionEnabled = true;
-            _newGameButton.TouchUpInside += _newGameButton_TouchUpInside;
+            _newGameButton.TouchUpInside += NewGameButton_OnNewGame;
 
-            _timerLabel.Font = UIFont.BoldSystemFontOfSize(25.0f);
+            _timerLabel.Font = UIFont.BoldSystemFontOfSize(50.0f);
 
             _stopButton.SetTitle("Stop", UIControlState.Normal);
+            _stopButton.TranslatesAutoresizingMaskIntoConstraints = false;
             _stopButton.UserInteractionEnabled = true;
-            _stopButton.TouchUpInside += _stopButton_TouchUpInside;
+            _stopButton.TouchUpInside += StopButton_OnStop;
 
             _stopButton.Layer.BorderWidth = 1;
             _stopButton.Layer.CornerRadius = 15;
             _stopButton.Layer.BorderColor = UIColor.Black.CGColor;
 
+            var viewToAdd = NSDictionary.FromObjectsAndKeys(new object[] { _letterLabel, _timerLabel, _timerSlider, _newGameButton, _stopButton }
+            , new object[] { "letter", "timerLabel", "timerSlider", "newGameButton", "stopButton" });
+
+            var sidePadding = 50;
+
+            View.AddConstraints(NSLayoutConstraint.FromVisualFormat(@"H:|-[letter]-|", 0, null, viewToAdd));
+            View.AddConstraints(NSLayoutConstraint.FromVisualFormat(@"H:|-[timerLabel]-|", 0, null, viewToAdd));
+            View.AddConstraints(NSLayoutConstraint.FromVisualFormat(@"H:|-[timerSlider]-|", 0, null, viewToAdd));
+            View.AddConstraints(NSLayoutConstraint.FromVisualFormat($@"H:|-({sidePadding})-[newGameButton]-({sidePadding})-|", 0, null, viewToAdd));
+            View.AddConstraints(NSLayoutConstraint.FromVisualFormat($@"H:|-({sidePadding})-[stopButton]-({sidePadding})-|", 0, null, viewToAdd));
+            View.AddConstraints(NSLayoutConstraint.FromVisualFormat(@"V:|-(100)-[letter]-(100@200)-[timerLabel]-[timerSlider]", 0, null, viewToAdd));
+            View.AddConstraints(NSLayoutConstraint.FromVisualFormat(@"V:[newGameButton(50)]-[stopButton(50)]-(125)-|", 0, null, viewToAdd));
         }
 
-        void _stopButton_TouchUpInside(object sender, EventArgs e)
+        void StopButton_OnStop(object sender, EventArgs e)
         {
             if (_timer != null)
                 _timer.Stop();
+
+            _letterLabel.UserInteractionEnabled = true;
+            _timerSlider.Enabled = true;
+            _newGameButton.Enabled = true;
         }
 
-
-        void _newGameButton_TouchUpInside(object sender, EventArgs e)
+        float GetTimerValueInSeconds()
         {
-            OnNewGame?.Invoke(this, true);
-            ChooseNewLetter();
+            return _timerSlider.Value * 60f;
+        }
 
-            if(_timer != null)
+        void NewGameButton_OnNewGame(object sender, EventArgs e)
+        {
+
+            OnNewGame?.Invoke(this, true);
+
+            _newGameButton.Enabled = false;
+            _timerSlider.Enabled = false;
+            _letterLabel.UserInteractionEnabled = false;
+
+            _secs = GetTimerValueInSeconds();
+            _timerLabel.Text = FormatSeconds(GetTimerValueInSeconds());
+
+            //ChooseNewLetter();
+
+            if (_timer != null)
             {
                 _timer.Stop();
                 _timer.Elapsed -= _timer_Elapsed;
@@ -88,15 +139,36 @@ namespace Scattergories
             _timer.Elapsed += _timer_Elapsed;
             _timer.Enabled = true;
             _timer.Start();
-
+       
         }
 
         void _timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             _secs -= 1;
-            InvokeOnMainThread(() => { _timerLabel.Text = FormatSeconds(_secs); });
+            if (_secs <=  0)
+            {
+                EndGame();
+                return;
+            }
+               
+            InvokeOnMainThread(() => {
+                _timerLabel.Text = FormatSeconds(_secs);
+            });
         }
 
+        void EndGame()
+        {
+            _timer.Stop();
+            SystemSound systemSound = new SystemSound(1323);
+            systemSound.PlayAlertSound();
+            InvokeOnMainThread(() =>
+            {
+                _letterLabel.UserInteractionEnabled = true;
+                _timerSlider.Enabled = true;
+                _newGameButton.Enabled = true;
+            });
+
+        }
 
         private string FormatSeconds(float secs)
         {

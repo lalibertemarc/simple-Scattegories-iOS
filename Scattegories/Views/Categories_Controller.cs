@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
+using System.Linq;
 using Foundation;
 using Newtonsoft.Json;
 using UIKit;
@@ -13,7 +13,6 @@ namespace Scattergories
 	public partial class Categories_Controller : UITableViewController
 	{
         List<string> _allCategoriesList;
-        List<string> _currentGameList;
         UIRefreshControl _refresher; 
 
         public Categories_Controller (IntPtr handle) : base (handle)
@@ -24,31 +23,30 @@ namespace Scattergories
         {
             base.ViewDidLoad();
 
-            _caterogiesTitleLabel.Text = "    Categories";
-            _caterogiesTitleLabel.Font = UIFont.BoldSystemFontOfSize(16.0f);
-
             LoadJson();
-            FormCurrentCategories();
 
-            this.TableView.Source = new CategoriesSource(_currentGameList);
-            this.TableView.RegisterClassForCellReuse(typeof(CategoriesCell), CategoriesCell.Key);
+            TableView.Source = new CategoriesSource(_allCategoriesList.OrderBy(a => Guid.NewGuid()).ToList());
+            TableView.RegisterClassForCellReuse(typeof(CategoriesCell), CategoriesCell.Key);
+            TableView.AllowsSelection = false;
 
             _refresher = new UIRefreshControl();
 
-            _refresher.ValueChanged += (sender, e) => {
-                ReloadCategories();
-                RefreshAsync();
-            };
+            _refresher.ValueChanged += _refresher_ValueChanged;
 
-            this.TableView.AddSubview(_refresher);
+            TableView.AddSubview(_refresher);
+        }
 
+        private void _refresher_ValueChanged(object sender, EventArgs e)
+        {
+            ReloadCategories();
+            RefreshAsync();
         }
 
         void ReloadCategories()
         {
-            FormCurrentCategories();
-            this.TableView.Source = new CategoriesSource(_currentGameList);
-            this.TableView.ReloadData();
+            ((CategoriesSource)TableView.Source).UpdateList();
+            //TableView.Source = new CategoriesSource(_allCategoriesList.OrderBy(a => Guid.NewGuid()).ToList());
+            TableView.ReloadData();
         }
 
         void RefreshAsync()
@@ -58,22 +56,10 @@ namespace Scattergories
 
         }
 
-        void FormCurrentCategories()
-        {
-            _currentGameList = new List<string>();
-            var random = new Random();
-            while(_currentGameList.Count != 12)
-            {
-                int index = random.Next(_allCategoriesList.Count);
-                if (!_currentGameList.Contains(_allCategoriesList[index]))
-                    _currentGameList.Add(_allCategoriesList[index]);  
-            }
-        }
-
         void LoadJson()
         {
             //json took from https://github.com/davidwen/scattergories
-            using (StreamReader r = new StreamReader("categories.json"))
+            using (StreamReader r = new StreamReader("categories_fr.json"))
             {
                 string json = r.ReadToEnd();
                 _allCategoriesList = JsonConvert.DeserializeObject<List<string>>(json);
@@ -82,7 +68,17 @@ namespace Scattergories
 
         public void InitNewGame()
         {
-            ReloadCategories();
+           
+
+                ReloadCategories();
+            //ReloadCategories();
+            //InvokeOnMainThread(() => {
+            //    //((CategoriesSource)TableView.Source).UpdateList();
+            //    TableView.Source = new CategoriesSource(_allCategoriesList.OrderBy(a => Guid.NewGuid()).ToList());
+            //    TableView.ReloadData();
+            //    TableView.SetNeedsDisplay();
+            //});
+          
         }
     }
 
@@ -95,6 +91,10 @@ namespace Scattergories
             _list = list;
         }
 
+        public void UpdateList()
+        {
+            _list = _list.OrderBy(a => Guid.NewGuid()).ToList();
+        }
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
@@ -105,7 +105,11 @@ namespace Scattergories
 
         public override nint RowsInSection(UITableView tableview, nint section)
         {
-            return _list.Count;
+            return 12;
+        }
+        public override string TitleForHeader(UITableView tableView, nint section)
+        {
+            return "Catégories";
         }
     }
 }

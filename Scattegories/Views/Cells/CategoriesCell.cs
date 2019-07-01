@@ -43,6 +43,7 @@ namespace Scattergories
         {
             titleLabel.Text = text;
             titleLabel.TextColor = UIColor.Black;
+            titleLabel.Font = UIFont.BoldSystemFontOfSize(25.0f);
         }
     }
 }

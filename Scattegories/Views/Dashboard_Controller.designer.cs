@@ -1,10 +1,11 @@
 // WARNING
 //
-// This file has been generated automatically by Visual Studio to store outlets and
-// actions made in the UI designer. If it is removed, they will be lost.
-// Manual changes to this file may not be handled correctly.
+// This file has been generated automatically by Visual Studio from the outlets and
+// actions declared in your storyboard file.
+// Manual changes to this file will not be maintained.
 //
 using Foundation;
+using System;
 using System.CodeDom.Compiler;
 
 namespace Scattergories
@@ -32,43 +33,9 @@ namespace Scattergories
 
         [Outlet]
         UIKit.UILabel _timerTitleLabel { get; set; }
-        
+
         void ReleaseDesignerOutlets ()
         {
-            if (_stopButton != null) {
-                _stopButton.Dispose ();
-                _stopButton = null;
-            }
-
-            if (_letterLabel != null) {
-                _letterLabel.Dispose ();
-                _letterLabel = null;
-            }
-
-            if (_letterTitleLabel != null) {
-                _letterTitleLabel.Dispose ();
-                _letterTitleLabel = null;
-            }
-
-            if (_newGameButton != null) {
-                _newGameButton.Dispose ();
-                _newGameButton = null;
-            }
-
-            if (_timerLabel != null) {
-                _timerLabel.Dispose ();
-                _timerLabel = null;
-            }
-
-            if (_timerSlider != null) {
-                _timerSlider.Dispose ();
-                _timerSlider = null;
-            }
-
-            if (_timerTitleLabel != null) {
-                _timerTitleLabel.Dispose ();
-                _timerTitleLabel = null;
-            }
         }
     }
 }

@@ -18,11 +18,14 @@ namespace Scattergories
             base.ViewDidLoad();
             var masterController = this.ViewControllers[0];
             var detailsController = this.ViewControllers[1];
+
+            var dashBoard = (Dashboard_Controller)masterController.ChildViewControllers[0];
+            var categories = (Categories_Controller)detailsController;
+
             this.PreferredDisplayMode = UISplitViewControllerDisplayMode.AllVisible;
 
-
-            ((Dashboard_Controller)masterController.ChildViewControllers[0]).OnNewGame += (sender, e) => {
-                ((Categories_Controller)detailsController).InitNewGame();
+            dashBoard.OnNewGame += (sender, e) => {
+                categories.InitNewGame();
             };
 
             ShowDetailViewController(Storyboard.InstantiateViewController("CategoriesController"), this);
