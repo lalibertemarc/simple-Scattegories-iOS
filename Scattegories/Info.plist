@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDisplayName</key>
-	<string>Scattergories</string>
+	<string>Scattegories</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.lalibertemarc.Scattegories</string>
 	<key>CFBundleShortVersionString</key>
@@ -47,6 +47,6 @@
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/AppIcon.appiconset</string>
 	<key>CFBundleVersion</key>
-	<string>4</string>
+	<string>8</string>
 </dict>
 </plist>
